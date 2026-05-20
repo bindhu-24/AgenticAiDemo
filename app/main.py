@@ -1,16 +1,20 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+# from app.db import engine, Base
+# from app import models  # import models so Base knows about them
 
-app = FastAPI()
-app.title = "Books API"
-app.version = "0.0.1"
+app = FastAPI(title="Books API", version="0.0.1")
+
+@app.on_event("startup")
+async def startup():
+    # Base.metadata.create_all(bind=engine)
+    print("Database tables created successfully.")
 
 @app.get('/', tags=["home"])
 def message():
-    return HTMLResponse(content="<h1>Welcome to the"\
-                        "Books API</h1><p>Use the books endpoint to get"\
-                            "a list of movies.</p>",status_code=200)
+    return {"status":"ok"}
+
 books = [
         {'id': 1,
         'title': 'Harry Potter',
